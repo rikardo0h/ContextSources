@@ -5,11 +5,10 @@ import android.hardware.Sensor;
 /**
  * Created by Manzanares on 21/05/15.
  */
-public class Cobject {
+public class orientacion extends Cobject {
 
-    public Cobject(Sensor sensor){
-        sensor.getName();
-        sensor.getPower();
+    public orientacion(Sensor sensor) {
+        super(sensor);
     }
 
 }
