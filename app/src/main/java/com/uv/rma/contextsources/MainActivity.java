@@ -2,11 +2,13 @@ package com.uv.rma.contextsources;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.uv.rma.ContextDBC.ContextServices;
 import com.uv.rma.ContextDBC.WrapperService;
 
 
@@ -19,6 +21,19 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
          x = new WrapperService();
         startService(new Intent(getBaseContext(), WrapperService.class));
+     /*   StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitNetwork().build());
+
+        try {
+            ContextServices WSSoap = new ContextServices();
+            String respuesta = WSSoap.getResultado("mexico");
+            Toast.makeText(getApplicationContext(), respuesta,
+                    Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), e.toString(),
+                    Toast.LENGTH_LONG).show();
+        }
+        */
+
     }
 
     @Override

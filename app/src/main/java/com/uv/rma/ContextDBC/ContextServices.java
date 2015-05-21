@@ -1,5 +1,7 @@
 package com.uv.rma.ContextDBC;
 
+import android.util.Log;
+
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
@@ -16,41 +18,33 @@ public class ContextServices {
     String METHOD_NAME = "Demo";
     String SOAP_ACTION = "http://tempuri.org/Demo";
     */
+    private static final String metodo = "GetCitiesByCountry";
+    private static final String namespace = "http://www.webserviceX.NET";
+    // namespace + metodo
+    private static final String accionSoap = "http://www.webserviceX.NET/GetCitiesByCountry";
+    // url del servicio WEB
+    private static final String url = "http://www.webservicex.net/globalweather.asmx";
 
-    String NAMESPACE = "http://www.w3schools.com/webservices/";
-    String URL="http://www.w3schools.com/webservices/tempconvert.asmx";
-    String METHOD_NAME = "CelsiusToFahrenheit";
-    String SOAP_ACTION = "http://www.w3schools.com/webservices/CelsiusToFahrenheit";
-
-
-    public String ejectContextServices(){
-        String re;
+    public String getResultado(String parametro) throws Exception {
         try {
-
-            // Modelo el request
-            SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
-            request.addProperty("Celsius", "40"); // Paso parametros al WS
-
-            // Modelo el Sobre
-            SoapSerializationEnvelope sobre = new SoapSerializationEnvelope(SoapEnvelope.VER12);
+            //Modelado de la peticion
+            SoapObject peticion = new SoapObject(namespace, metodo);
+            // Paso parametros al WS
+            peticion.addProperty("CountryName", parametro);
+            // Modelado del Sobre
+            SoapSerializationEnvelope sobre = new SoapSerializationEnvelope(SoapEnvelope.VER11);
             sobre.dotNet = true;
-            sobre.setOutputSoapObject(request);
-
+            sobre.setOutputSoapObject(peticion);
             // Modelo el transporte
-            HttpTransportSE transporte = new HttpTransportSE(URL);
-
+            HttpTransportSE transporte = new HttpTransportSE(url);
             // Llamada
-            transporte.call(SOAP_ACTION, sobre);
-
+            transporte.call(accionSoap, sobre);
             // Resultado
             SoapPrimitive resultado = (SoapPrimitive) sobre.getResponse();
-
-            re=resultado.toString();
-
+            return resultado.toString() ;
         } catch (Exception e) {
-            re=e.getMessage();
+            Log.e("ERROR", e.getMessage());
         }
-
-    return re;
+        return "";
     }
 }

@@ -237,13 +237,9 @@ public class WrapperService extends Service implements SensorEventListener {
     }
 
     public void setServicio(){
-        ContextServices x = new ContextServices();
+        /*ContextServices x = new ContextServices();
         Toast.makeText(getApplicationContext(), ("RESULTADO "+x.ejectContextServices()),
-        Toast.LENGTH_LONG).show();
-
-
-
-
+        Toast.LENGTH_LONG).show();*/
     }
 
 }
