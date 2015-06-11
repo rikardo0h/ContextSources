@@ -9,18 +9,29 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.uv.rma.ContextDBC.ContextServices;
+import com.uv.rma.ContextDBC.ListenerService;
 import com.uv.rma.ContextDBC.WrapperService;
+import com.uv.rma.ContextDBC.WrapperUbService;
 
 
 public class MainActivity extends ActionBarActivity {
     WrapperService x;
+    WrapperUbService y;
+    ListenerService z;
+    Intent sUb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
          x = new WrapperService();
+         y = new WrapperUbService();
+        z = new  ListenerService();
+
         startService(new Intent(getBaseContext(), WrapperService.class));
+        startService(new Intent(getBaseContext(), WrapperUbService.class));
+        startService(new Intent(getBaseContext(), ListenerService.class));
+
      /*   StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitNetwork().build());
 
         try {
@@ -61,9 +72,12 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onPause() {
         stopService(new Intent(getBaseContext(), WrapperService.class));
+        stopService(new Intent(getBaseContext(), WrapperUbService.class));
+        stopService(new Intent(getBaseContext(), ListenerService.class));
 
         Toast.makeText(this, "onPause", Toast.LENGTH_SHORT).show();
         x.cerrarData();
+        y.cerrarData();
         super.onPause();
     }
 

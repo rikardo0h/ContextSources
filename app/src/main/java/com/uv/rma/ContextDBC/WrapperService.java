@@ -3,6 +3,7 @@ package com.uv.rma.ContextDBC;
 import android.app.Service;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -29,7 +30,7 @@ public class WrapperService extends Service implements SensorEventListener {
 
     DataContext usdbh;
     SQLiteDatabase db;
-    ContentValues nuevoRegistro = new ContentValues();;
+    ContentValues nuevoRegistro = new ContentValues();//;
     Runnable runnable = new Runnable() {
         public void run() {
             limpiar();
@@ -57,12 +58,24 @@ public class WrapperService extends Service implements SensorEventListener {
                 getSystemService(SENSOR_SERVICE);
         List<Sensor> listaSensores = sensorManager.
                 getSensorList(Sensor.TYPE_ALL);
+        crearData();
+        usdbh.makeContext(db, listaSensores);
+
         for(Sensor sensor: listaSensores) {
             Toast.makeText(getApplicationContext(), sensor.getName(),
                     Toast.LENGTH_LONG).show();
+            nuevoRegistro.clear();
+            nuevoRegistro.put("sensor",getRealType(sensor.getName()));
+            nuevoRegistro.put("estado", 1);
+            nuevoRegistro.put("tiempo", (DateFormat.format("dd-MM-yyyy hh:mm:ss"
+                    , new java.util.Date()).toString()));
+            saveD(nuevoRegistro, "sensores");
         }
-        crearData();
-        usdbh.makeContext(db, listaSensores);
+
+
+
+
+        Log.d("TAG","EAQUI VAMOS");
 
         //////
         listaSensores = sensorManager.getSensorList(Sensor.TYPE_ORIENTATION);
@@ -93,7 +106,7 @@ public class WrapperService extends Service implements SensorEventListener {
 
         ////
         runnable.run();
-        setServicio();
+//        setServicio();
 
 
         return START_STICKY;
@@ -134,7 +147,7 @@ public class WrapperService extends Service implements SensorEventListener {
                     nuevoRegistro.put("v1", evento.values[0]);
                     nuevoRegistro.put("v2", evento.values[1]);
                     nuevoRegistro.put("v3", evento.values[2]);
-                    nuevoRegistro.put("_id","1");
+                   // nuevoRegistro.put("_id","1");
                     nuevoRegistro.put("tiempo", (DateFormat.format("dd-MM-yyyy hh:mm:ss"
                             , new java.util.Date()).toString()));
                    // db.insert("orientacion", null, nuevoRegistro);
@@ -145,7 +158,7 @@ public class WrapperService extends Service implements SensorEventListener {
                     nuevoRegistro.put("v1", evento.values[0]);
                     nuevoRegistro.put("v2", evento.values[1]);
                     nuevoRegistro.put("v3", evento.values[2]);
-                    nuevoRegistro.put("_id","1");
+                    //nuevoRegistro.put("_id","1");
                     nuevoRegistro.put("tiempo", (DateFormat.format("dd-MM-yyyy hh:mm:ss"
                             , new java.util.Date()).toString()));
                     //db.insert("acelerometro", null, nuevoRegistro);
@@ -160,7 +173,7 @@ public class WrapperService extends Service implements SensorEventListener {
                     nuevoRegistro.put("v1", evento.values[0]);
                     nuevoRegistro.put("v2", evento.values[1]);
                     nuevoRegistro.put("v3", evento.values[2]);
-                    nuevoRegistro.put("_id","1");
+                   // nuevoRegistro.put("_id","1");
                     nuevoRegistro.put("tiempo", (DateFormat.format("dd-MM-yyyy hh:mm:ss"
                             , new java.util.Date()).toString()));
                     //db.insert("magnometro", null, nuevoRegistro);
@@ -174,7 +187,7 @@ public class WrapperService extends Service implements SensorEventListener {
                 case Sensor.TYPE_LIGHT:
                     nuevoRegistro.clear();
                     nuevoRegistro.put("v1", evento.values[0]);
-                    nuevoRegistro.put("_id","1");
+                   // nuevoRegistro.put("_id","1");
                     nuevoRegistro.put("tiempo", (DateFormat.format("dd-MM-yyyy hh:mm:ss"
                             , new java.util.Date()).toString()));
                     //db.insert("luz", null, nuevoRegistro);
@@ -185,7 +198,7 @@ public class WrapperService extends Service implements SensorEventListener {
                 case Sensor.TYPE_TEMPERATURE:
                     nuevoRegistro.clear();
                     nuevoRegistro.put("v1", evento.values[0]);
-                    nuevoRegistro.put("_id","1");
+                   // nuevoRegistro.put("_id","1");
                     nuevoRegistro.put("tiempo", (DateFormat.format("dd-MM-yyyy hh:mm:ss"
                             , new java.util.Date()).toString()));
                     //db.insert("temperatura", null, nuevoRegistro);
@@ -211,9 +224,8 @@ public class WrapperService extends Service implements SensorEventListener {
     }
 
     public void crearData(){
-       usdbh = new DataContext(this, "Contexto3", null, 1);
+       usdbh = new DataContext(this, "BDcontext", null, 1);
         db = usdbh.getWritableDatabase();
-
     }
 
     public void cerrarData(){
@@ -236,10 +248,27 @@ public class WrapperService extends Service implements SensorEventListener {
         usdbh.clean(db);
     }
 
-    public void setServicio(){
+//    public void setServicio(){
         /*ContextServices x = new ContextServices();
         Toast.makeText(getApplicationContext(), ("RESULTADO "+x.ejectContextServices()),
         Toast.LENGTH_LONG).show();*/
+    //}
+
+
+    public String getRealType(String tipo){
+        if (tipo.indexOf("Acceleration")!=-1) {
+            return "acelerometro";
+        }
+        if (tipo.indexOf("Orientation")!=-1) {
+            return "orientacion";
+        }
+        if (tipo.indexOf("Magnetic")!=-1) {
+            return "magnetismo";
+        }
+        if (tipo.indexOf("Light")!=-1) {
+            return "luz";
+        }
+        return "error";
     }
 
 }

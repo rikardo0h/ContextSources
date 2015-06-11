@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.uv.rma.contextsources" >
-    <uses-permission android:name="ANDROID.PERMISSION.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="ANDROID.PERMISSION.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+
     <application
+        android:name="com.uv.rma.ContextDBC.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -21,6 +28,16 @@
 
         <service
             android:name="com.uv.rma.ContextDBC.WrapperService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+        <service
+            android:name="com.uv.rma.ContextDBC.WrapperUbService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+        <service
+            android:name="com.uv.rma.ContextDBC.ListenerService"
             android:enabled="true"
             android:exported="true" >
         </service>
